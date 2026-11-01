@@ -1,0 +1,401 @@
+# Implementation Plan: Congero Spec Roadmap
+
+## Overview
+
+This plan tracks the authoring of the eight Congero design documents in dependency order. Each task corresponds to producing one design document as a spec under `.kiro/specs/`. Tasks follow the wave order defined in the dependency graph. Wave 5 tasks (Areas 5 and 8) may be authored in parallel once Wave 4 is complete. Wave 7 (Area 6) may begin once both Area 5 and Area 7 are complete.
+
+Each design document is a **design-only spec** — no requirements document or task list is produced for the individual areas. The spec directory for each area should contain only a `design.md` and a `.config.kiro` file.
+
+---
+
+## Tasks
+
+- [x] 1. Author Area 1 — Game Rules & Core Mechanics design document
+  - Create spec directory: `.kiro/specs/congero-game-rules/`
+  - Produce `design.md` covering all area-specific required content
+  - No upstream dependencies — author first
+  - [x] 1.1 Write Overview and scope statement
+    - One-paragraph summary of Area 1's boundaries and role in the system
+    - Explicitly state what is out of scope (modifier effects, state storage, UI rendering)
+    - _Requirements: 1.3_
+  - [x] 1.2 Define Data Models
+    - Fully typed TypeScript interfaces for: `Card`, `Meld`, `CanastaType`, `TurnPhase`, `GoOutCondition`
+    - No `any`, no partial types — all fields named and typed
+    - _Requirements: 2.2, 4.1_
+  - [x] 1.3 Specify Core Algorithms — canasta rules and scoring formulas
+    - Define every canasta type (natural, dirty, super, red, frozen, partner, concealed out) with eligibility conditions and base score
+    - Express each scoring formula as a pure function: `scoreCanasta(meld, canastaType): number`
+    - Specify the meld validity function: inputs (proposed cards), outputs (valid/invalid + rejection reason), all rejection conditions enumerated
+    - _Requirements: 2.2, 4.2_
+  - [x] 1.4 Specify Core Algorithms — turn structure and going-out conditions
+    - Turn structure state machine: phases (Draw, Meld, Discard, GoOut) with all valid transitions
+    - Going-out conditions: normal, concealed out, partner canasta — all cases covered
+    - Boss rule injection points: named hooks where boss rules can override base behavior (e.g., `ON_CANASTA_SCORED`, `ON_TURN_START`)
+    - _Requirements: 2.2, 4.2_
+  - [x] 1.5 Define Interfaces & Contracts with adjacent areas
+    - Typed contract with Area 3 (Modifier Systems): named injection point hooks
+    - Typed contract with Area 4 (Enhancements): meld validity extension point for Anchor enhancement
+    - Typed contract with Area 8 (State Management): `scoreCanasta` and `validateMeld` function signatures
+    - _Requirements: 1.4, 2.1_
+  - [x] 1.6 Write Worked Example
+    - Trace a concrete scenario end-to-end: e.g., player seals a 7-Queen natural canasta and scores it
+    - Confirm all formulas and state transitions produce correct output
+    - _Requirements: 6.6_
+  - [x] 1.7 Document Open Questions
+    - List any unresolved decisions with rationale for deferral or proposed resolution
+    - _Requirements: 2.1_
+  - [x] 1.8 Self-review against universal done checklist and area-specific done criteria
+    - Every canasta type has a complete scoring formula expressed as a pure function
+    - Meld validity function fully specified with all rejection conditions
+    - Every boss rule has a named injection point in the turn structure state machine
+    - Going-out conditions cover all cases (normal, concealed, partner canasta)
+    - _Requirements: 4.1, 4.2, 7.1, 7.2_
+
+- [x] 2. Author Area 2 — Deckbuilding & Run Structure design document
+  - Create spec directory: `.kiro/specs/congero-deckbuilding/`
+  - Produce `design.md` covering all area-specific required content
+  - Depends on: **Area 1** (Game Rules & Core Mechanics)
+  - [x] 2.1 Write Overview and scope statement
+    - One-paragraph summary of Area 2's boundaries and role
+    - Explicitly state what is out of scope (individual enhancement types, modifier effects, shop UI rendering)
+    - _Requirements: 1.3_
+  - [x] 2.2 Define Data Models
+    - Fully typed TypeScript interfaces for: `CardPoolEntry`, `Ante`, `Round`, `ShopItem`, `RunProgression`
+    - _Requirements: 2.3, 4.1_
+  - [x] 2.3 Specify Core Algorithms — card pool and progression
+    - Full card pool enumeration: every rank (A–K), suit (♠♥♦♣), and special card (red threes, black threes, jokers, twos) with count
+    - Starting deck composition
+    - Ante/round progression table: complete for at least 8 antes (ante number, rounds per ante, score target, boss round position)
+    - Score target scaling formula: explicit formula relating ante number to target score
+    - _Requirements: 2.3, 4.3_
+  - [x] 2.4 Specify Core Algorithms — round lifecycle and shop
+    - Round lifecycle diagram: phases in sequence (Draw, Play, Score, Shop) with entry/exit conditions
+    - Shop item generation algorithm: item pool, rarity weights, slot count, reroll cost
+    - Card acquisition model: add, remove, convert operations with cost formulas
+    - _Requirements: 2.3, 4.3_
+  - [x] 2.5 Define Interfaces & Contracts with adjacent areas
+    - Typed contract with Area 1: references to canasta types and scoring targets
+    - Typed contract with Area 3: shop mechanics extension points for House Rules that alter shop behavior
+    - Typed contract with Area 8: run state schema inputs (round number, ante, score target)
+    - _Requirements: 1.4, 2.1_
+  - [x] 2.6 Write Worked Example
+    - Trace a concrete run scenario: player completes Ante 2, Round 3 — draw phase through shop phase
+    - Confirm progression table values and shop generation produce correct output
+    - _Requirements: 6.6_
+  - [x] 2.7 Document Open Questions
+    - _Requirements: 2.1_
+  - [x] 2.8 Self-review against universal done checklist and area-specific done criteria
+    - Full card pool enumerated (every rank, suit, and special card with count)
+    - Ante/round progression table complete for at least 8 antes
+    - Shop item generation algorithm specifies item pool, rarity weights, and slot count
+    - Score target scaling formula defined and produces values for all antes
+    - _Requirements: 4.3, 7.1, 7.3_
+
+- [x] 3. Checkpoint — Areas 1 and 2 complete
+  - Verify both design documents satisfy their universal done checklist and area-specific done criteria before proceeding to Area 3.
+
+- [-] 4. Author Area 3 — Modifier Systems design document
+  - Create spec directory: `.kiro/specs/congero-modifier-systems/`
+  - Produce `design.md` covering all area-specific required content
+  - Depends on: **Area 1** (Game Rules & Core Mechanics), **Area 2** (Deckbuilding & Run Structure)
+  - [x] 4.1 Write Overview and scope statement
+    - One-paragraph summary of Area 3's boundaries and role
+    - Explicitly state what is out of scope (base scoring formulas, individual card enhancements, UI display, state storage)
+    - _Requirements: 1.3_
+  - [x] 4.2 Define Data Models
+    - Fully typed TypeScript interfaces for: `PartnerSlot`, `HouseRule`, `Scorepad`, `TraySlot`, `BossRule`, `ModifierPipeline`
+    - _Requirements: 2.4, 4.1_
+  - [ ] 4.3 Specify Core Algorithms — modifier pipeline and stacking
+    - Canonical modifier stacking order: `base_score → scorepad_modifiers → partner_modifiers → tray_modifiers → boss_modifiers`
+    - Conflict resolution rules: last-write-wins vs additive vs multiplicative — all cases specified
+    - Partner slot model: slot count (5), slot types, how partners are drafted and replaced
+    - Partner effect application: when effects fire (on meld, on canasta, on draw, on discard) and how they compose
+    - _Requirements: 2.4, 4.4_
+  - [ ] 4.4 Specify Core Algorithms — House Rules, Scorepads, Trays, and Boss Rules
+    - House Rule model: global vs round-scoped rules, how they are applied to the base rule set
+    - Scorepad model: formula composition — how scorepads modify the base scoring functions from Area 1
+    - Tray slot model: slot count, tray types, how trays constrain or bonus the meld placed in them
+    - Boss rule injection: how boss rules use the named injection points defined in Area 1
+    - At least one fully worked example for each modifier type (Partner, House Rule, Scorepad, Tray, Boss Rule)
+    - _Requirements: 2.4, 4.4_
+  - [ ] 4.5 Define Interfaces & Contracts with adjacent areas
+    - Typed contract with Area 1: references to named injection point hooks (e.g., `ON_CANASTA_SCORED`)
+    - Typed contract with Area 2: shop mechanics extension points for House Rules
+    - Typed contract with Area 4: modifier pipeline entry point for card enhancements
+    - Typed contract with Area 8: modifier state schema inputs
+    - _Requirements: 1.4, 2.1_
+  - [ ] 4.6 Write Worked Example
+    - Trace a scenario through the full modifier pipeline: e.g., The Purist partner active, Scorepad doubling natural canastas, boss rule capping score
+    - Confirm stacking order and conflict resolution produce correct output
+    - _Requirements: 6.6_
+  - [ ] 4.7 Document Open Questions
+    - _Requirements: 2.1_
+  - [ ] 4.8 Self-review against universal done checklist and area-specific done criteria
+    - Modifier stacking order defined as a canonical pipeline
+    - All conflict resolution rules specified
+    - Every modifier type has at least one fully worked example
+    - Boss rule injection mechanism references named injection points from Area 1
+    - _Requirements: 4.4, 7.1, 7.4_
+
+- [~] 5. Checkpoint — Areas 1–3 complete
+  - Verify Area 3 satisfies its universal done checklist and area-specific done criteria before proceeding to Area 4.
+
+- [~] 6. Author Area 4 — Card Enhancements & Wild Card Economy design document
+  - Create spec directory: `.kiro/specs/congero-card-enhancements/`
+  - Produce `design.md` covering all area-specific required content
+  - Depends on: **Area 1** (Game Rules & Core Mechanics), **Area 3** (Modifier Systems)
+  - [ ] 6.1 Write Overview and scope statement
+    - One-paragraph summary of Area 4's boundaries and role
+    - Explicitly state what is out of scope (base meld validity rules, modifier stacking pipeline, UI display, per-card state storage)
+    - _Requirements: 1.3_
+  - [ ] 6.2 Define Data Models
+    - Fully typed TypeScript interfaces for: `Enhancement`, `EnhancementType` (enum of all 10), `WildCardRule`, `EnhancementInteraction`
+    - _Requirements: 2.5, 4.1_
+  - [ ] 6.3 Specify Core Algorithms — enhancement definitions and wild card rules
+    - All ten enhancement types defined: Gilded, Echo, Sticky, Marked, Pure, Hot, Frozen, Partner, Buried, Anchor — each with trigger condition, effect, and constraints
+    - Wild card substitution rules: which cards are wild (2s, Jokers), how they count toward meld size and canasta type
+    - Wild card economy constraints expressed as invariants (e.g., "a meld may contain at most N wilds where N < total meld size / 2")
+    - Boss rule override points for wild card economy
+    - _Requirements: 2.5, 4.5_
+  - [ ] 6.4 Specify Core Algorithms — enhancement interaction matrix
+    - Complete 10×10 interaction matrix: how each pair of enhancements interacts when both are present in a meld
+    - All 100 pairs addressed — "no interaction" is a valid and required entry
+    - Note Anchor's effect on meld validity (minimum meld size reduced from 3 to 2)
+    - Enhancement acquisition: how enhancements are applied to cards (shop, seal items)
+    - _Requirements: 2.5, 4.5_
+  - [ ] 6.5 Define Interfaces & Contracts with adjacent areas
+    - Typed contract with Area 1: meld validity extension point for Anchor enhancement
+    - Typed contract with Area 3: modifier pipeline entry point — where enhancement effects fire relative to the pipeline
+    - Typed contract with Area 8: per-card enhancement state schema
+    - _Requirements: 1.4, 2.1_
+  - [ ] 6.6 Write Worked Example
+    - Trace a scenario with multiple enhancements: e.g., a meld with a Gilded card and an Echo card, with The Purist partner active
+    - Confirm interaction matrix and modifier pipeline produce correct output
+    - _Requirements: 6.6_
+  - [ ] 6.7 Document Open Questions
+    - _Requirements: 2.1_
+  - [ ] 6.8 Self-review against universal done checklist and area-specific done criteria
+    - All ten enhancement types defined with trigger, effect, and constraints
+    - Enhancement interaction matrix complete for all 10×10 pairs
+    - Wild card economy constraints expressed as invariants
+    - Worked example covers at least one multi-enhancement interaction
+    - _Requirements: 4.5, 7.1, 7.5_
+
+- [~] 7. Checkpoint — Areas 1–4 complete
+  - Verify Area 4 satisfies its universal done checklist and area-specific done criteria before proceeding to Wave 5.
+  - Areas 5 and 8 may now be authored in parallel.
+
+- [~] 8. Author Area 5 — UI/UX Design document
+  - Create spec directory: `.kiro/specs/congero-ui-ux/`
+  - Produce `design.md` covering all area-specific required content
+  - Depends on: **Areas 1–4** (all game logic areas complete)
+  - **Note:** May be authored in parallel with Area 8 (Game State Management)
+  - [ ] 8.1 Write Overview and scope statement
+    - One-paragraph summary of Area 5's boundaries and role
+    - Explicitly state what is out of scope (Angular component names, BabylonJS API calls, game rule logic)
+    - _Requirements: 1.3_
+  - [ ] 8.2 Define Data Models
+    - Fully typed TypeScript interfaces for: `ScreenLayout`, `CardVisualState`, `MeldVisualState`, `ActionButtonState`, `DesignToken`
+    - _Requirements: 2.6, 4.1_
+  - [ ] 8.3 Specify Core Algorithms — screen layouts and interaction model
+    - Annotated wireframe descriptions for all four screens: Gameplay HUD, Deck/Inventory, Shop Rewards, Score Results
+    - Layout dimensions and zone labels for each screen
+    - Interaction model: drag-and-drop card placement, click-to-select fallback, confirmation dialogs, ghost slot behavior
+    - _Requirements: 2.6, 4.6_
+  - [ ] 8.4 Specify Core Algorithms — interactive states, breakpoints, and accessibility
+    - All interactive states enumerated: cards (default, selected, playable, unplayable, wild, enhanced, sealed), melds (empty, partial, complete, sealed), action buttons (enabled, disabled, loading)
+    - Responsive layout changes at both breakpoints: ≤1240px and ≤720px — fully described
+    - Keyboard navigation map covering all interactive elements
+    - ARIA role assignments and color contrast ratios
+    - _Requirements: 2.6, 4.6_
+  - [ ] 8.5 Define the Neon Space Canasta design system token table
+    - Complete token table: all color palette tokens, typography role tokens, spacing tokens, panel style tokens, background effect specification
+    - This is the owner document for design tokens — downstream areas (6 and 7) reference this section
+    - _Requirements: 5.5_
+  - [ ] 8.6 Define Interfaces & Contracts with adjacent areas
+    - Typed contract with Area 6 (BabylonJS): design token references for material colors
+    - Typed contract with Area 7 (Angular): design token references via CSS custom properties; accessibility requirements for ARIA attributes
+    - _Requirements: 1.4, 2.1_
+  - [ ] 8.7 Write Worked Example
+    - Trace a concrete UI scenario end-to-end: e.g., player drags a card from hand to a meld zone, meld reaches canasta, seal animation triggers, score results screen displays
+    - Confirm all interactive states and transitions are covered
+    - _Requirements: 6.6_
+  - [ ] 8.8 Document Open Questions
+    - _Requirements: 2.1_
+  - [ ] 8.9 Self-review against universal done checklist and area-specific done criteria
+    - All four screens have annotated wireframe descriptions with layout dimensions and zone labels
+    - All interactive states for cards, melds, and action buttons enumerated
+    - Neon Space Canasta design system token table complete
+    - Responsive layout changes at both breakpoints fully described
+    - Keyboard navigation map covers all interactive elements
+    - _Requirements: 4.6, 7.1, 7.6_
+
+- [~] 9. Author Area 8 — Game State Management design document
+  - Create spec directory: `.kiro/specs/congero-state-management/`
+  - Produce `design.md` covering all area-specific required content
+  - Depends on: **Areas 1–4** (all game logic areas complete)
+  - **Note:** May be authored in parallel with Area 5 (UI/UX Design)
+  - [ ] 9.1 Write Overview and scope statement
+    - One-paragraph summary of Area 8's boundaries and role
+    - Explicitly state what is out of scope (game rule logic, modifier application, UI rendering, Angular signal consumption)
+    - Note: Area 8 owns the error handling and recovery model for all areas
+    - _Requirements: 1.3_
+  - [ ] 9.2 Define Data Models — all state schemas
+    - Fully typed TypeScript interface for `RoundState`: current round, turn number, hand, melds, discard pile, draw pile, score, target
+    - Fully typed TypeScript interface for `DeckState`: full card list with enhancements, rank density, wild count
+    - Fully typed TypeScript interface for `MeldState`: per-meld card list, canasta status, tray assignment
+    - Fully typed TypeScript interface for `RunState`: wraps RoundState, DeckState, MeldState, and run metadata
+    - All fields required (prefer explicit `null` over optional `?`)
+    - Schema version field included in RunState for migration
+    - _Requirements: 2.9, 4.9_
+  - [ ] 9.3 Specify Core Algorithms — phase transitions and invariants
+    - Phase enum: all valid game phases
+    - Phase transition table: all valid transitions with guard conditions
+    - State invariants: conditions that must hold in every valid state
+    - _Requirements: 2.9, 4.9_
+  - [ ] 9.4 Specify Core Algorithms — persistence and save/load lifecycle
+    - Persistence model: storage mechanism (localStorage for MVP, IndexedDB for large state), serialization format, schema version field
+    - Save/load lifecycle: when auto-save fires, how state is restored on load
+    - Migration strategy: how schema version changes are handled
+    - _Requirements: 2.9, 4.9_
+  - [ ] 9.5 Specify Core Algorithms — error handling and recovery model
+    - Invalid state detection: invariant checks
+    - Recovery strategies: rollback to last valid state, reset to round start
+    - Persistence failure handling
+    - Rendering error fallback
+    - This is the owner document for error handling — all other areas reference this section
+    - _Requirements: 5.4_
+  - [ ] 9.6 Define Interfaces & Contracts with adjacent areas
+    - Typed contract with Area 1: `scoreCanasta` and `validateMeld` function signatures consumed by state transitions
+    - Typed contract with Area 3: modifier state schema inputs
+    - Typed contract with Area 7 (Angular): state schema as the source of truth for Angular signals
+    - _Requirements: 1.4, 2.1_
+  - [ ] 9.7 Write Worked Example
+    - Trace a concrete state scenario end-to-end: e.g., player seals a canasta — `CANASTA_SEALED` transition fires, `MeldState.score` updated, auto-save triggers, state restored after browser refresh
+    - Confirm all schemas, transitions, and persistence lifecycle produce correct output
+    - _Requirements: 6.6_
+  - [ ] 9.8 Document Open Questions
+    - _Requirements: 2.1_
+  - [ ] 9.9 Self-review against universal done checklist and area-specific done criteria
+    - All state schemas (round, deck, meld, run) are fully typed TypeScript interfaces
+    - All phase transitions enumerated with guard conditions
+    - Persistence format specified (storage mechanism, serialization format, schema version)
+    - Error handling model covers invalid state, persistence failure, and rendering error cases
+    - Save/load lifecycle specifies when auto-save fires and how migration works
+    - _Requirements: 4.9, 7.1, 7.9_
+
+- [~] 10. Checkpoint — Areas 5 and 8 complete
+  - Verify both design documents satisfy their universal done checklist and area-specific done criteria before proceeding to Area 7.
+
+- [~] 11. Author Area 7 — Angular App Architecture design document
+  - Create spec directory: `.kiro/specs/congero-angular-architecture/`
+  - Produce `design.md` covering all area-specific required content
+  - Depends on: **Area 5** (UI/UX Design), **Area 8** (Game State Management)
+  - [ ] 11.1 Write Overview and scope statement
+    - One-paragraph summary of Area 7's boundaries and role
+    - Explicitly state what is out of scope (BabylonJS scene internals, game rule logic, UI visual design)
+    - _Requirements: 1.3_
+  - [ ] 11.2 Define Data Models
+    - Fully typed TypeScript interfaces for: `SignalInventoryEntry`, `ServiceDefinition`, `RouteDefinition`, `BabylonJSBoundaryContract`
+    - _Requirements: 2.8, 4.1_
+  - [ ] 11.3 Specify Core Algorithms — component tree and signal inventory
+    - Full module and component tree with lazy-loading boundaries marked
+    - Named list of all signals and computed signals: name, type, owning service — complete inventory
+    - Functional reactivity patterns: effects used for side effects only, `computed()` for derived state, signal composition patterns
+    - _Requirements: 2.8, 4.8_
+  - [ ] 11.4 Specify Core Algorithms — routing and service layer
+    - Route definitions: all routes, lazy-loaded feature modules, route guards, resolvers — all named and described
+    - Service layer: all services named with their responsibilities and injection scope (root vs feature)
+    - _Requirements: 2.8, 4.8_
+  - [ ] 11.5 Define the BabylonJS integration boundary contract
+    - Explicit typed contract: input signals → scene updates, scene events → Angular signals
+    - This is the owner document for the Angular/BabylonJS integration boundary
+    - Area 6 references this contract — do not redefine it there
+    - _Requirements: 2.8, 4.8_
+  - [ ] 11.6 Define Interfaces & Contracts with adjacent areas
+    - Typed contract with Area 5: design token consumption via CSS custom properties; ARIA attribute and keyboard event handler requirements
+    - Typed contract with Area 6: BabylonJS integration boundary (defined in 11.5, referenced here)
+    - Typed contract with Area 8: state schema as source of truth for Angular signals
+    - _Requirements: 1.4, 2.1_
+  - [ ] 11.7 Write Worked Example
+    - Trace a concrete Angular scenario: e.g., player action triggers a signal update → computed signal recalculates → effect sends update to BabylonJS scene → scene re-renders
+    - Confirm signal graph and BabylonJS boundary contract produce correct data flow
+    - _Requirements: 6.6_
+  - [ ] 11.8 Document Open Questions
+    - _Requirements: 2.1_
+  - [ ] 11.9 Self-review against universal done checklist and area-specific done criteria
+    - Component tree fully specified with lazy-loading boundaries marked
+    - Every signal and computed signal named, typed, and assigned to an owning service
+    - BabylonJS integration boundary explicitly defined as a typed contract
+    - All route definitions, guards, and resolvers named and described
+    - All services named with responsibilities and injection scope
+    - _Requirements: 4.8, 7.1, 7.8_
+
+- [~] 12. Checkpoint — Area 7 complete
+  - Verify Area 7 satisfies its universal done checklist and area-specific done criteria before proceeding to Area 6.
+  - Area 6 may now begin (depends on Areas 5 and 7).
+
+- [~] 13. Author Area 6 — BabylonJS Rendering design document
+  - Create spec directory: `.kiro/specs/congero-babylonjs-rendering/`
+  - Produce `design.md` covering all area-specific required content
+  - Depends on: **Area 5** (UI/UX Design), **Area 7** (Angular App Architecture)
+  - [ ] 13.1 Write Overview and scope statement
+    - One-paragraph summary of Area 6's boundaries and role
+    - Explicitly state what is out of scope (Angular component structure, game rule logic, UI layout — Area 5 owns design tokens; Area 6 references them)
+    - _Requirements: 1.3_
+  - [ ] 13.2 Define Data Models
+    - Fully typed TypeScript interfaces for: `SceneNode`, `CardMesh`, `AnimationState`, `ParticleEffectConfig`, `PerformanceBudget`
+    - _Requirements: 2.7, 4.1_
+  - [ ] 13.3 Specify Core Algorithms — scene graph and card mesh pipeline
+    - Full scene graph node hierarchy: root → table → meld zones → card meshes → UI overlays
+    - Card mesh pipeline: geometry spec (plane mesh dimensions), PBR material pipeline, emissive glow, texture atlas layout
+    - Camera and lighting: camera type (orthographic for 2D-feel), position, FOV; ambient light color and intensity; point lights for card highlights
+    - _Requirements: 2.7, 4.7_
+  - [ ] 13.4 Specify Core Algorithms — animation state machine and effects
+    - Animation state machine: states (Idle, Dealing, Melding, Sealing, Discarding), all transitions, timing values in milliseconds
+    - Glow and particle effects: glow layer configuration, particle system specs for canasta seal burst, wild card glow, frozen discard shimmer
+    - _Requirements: 2.7, 4.7_
+  - [ ] 13.5 Specify performance budget and asset loading
+    - Performance budget: target 60fps, max draw calls per frame, animation timing constraints, state update latency budget
+    - This is the owner document for performance budgets — Areas 7 and 8 reference this section
+    - Asset loading: texture atlas strategy, font rendering approach, loading sequence and fallbacks
+    - _Requirements: 2.7, 5.2_
+  - [ ] 13.6 Define Interfaces & Contracts with adjacent areas
+    - Typed contract with Area 5: design token references for material colors (cite "Area 5, Design System Tokens" — do not redefine)
+    - Typed contract with Area 7: BabylonJS integration boundary contract (cite "Area 7, BabylonJS Integration Boundary" — do not redefine)
+    - _Requirements: 1.4, 2.1, 5.6_
+  - [ ] 13.7 Write Worked Example
+    - Trace a concrete rendering scenario: e.g., player seals a natural canasta — deal animation plays, glow layer activates, particle burst fires, scene updates to sealed state
+    - Confirm scene graph, animation state machine, and performance budget are consistent
+    - _Requirements: 6.6_
+  - [ ] 13.8 Document Open Questions
+    - _Requirements: 2.1_
+  - [ ] 13.9 Self-review against universal done checklist and area-specific done criteria
+    - Scene graph node hierarchy fully described
+    - Card material pipeline specified (geometry, material type, texture atlas layout)
+    - Animation state machine defined with all states, transitions, and timing values in milliseconds
+    - Performance budget stated: target fps, max draw calls, animation timing constraints
+    - Asset loading sequence and fallback strategy specified
+    - _Requirements: 4.7, 7.1, 7.7_
+
+- [~] 14. Final Checkpoint — All eight design documents complete
+  - Verify all eight design documents satisfy their universal done checklist and area-specific done criteria
+  - Confirm each document has passed all three review passes:
+    - Self-review pass: document checked against the universal done checklist
+    - Cross-reference pass: all upstream dependency documents cited correctly by name and section; no upstream content redefined
+    - Worked-example pass: worked example traced through the area's logic and output confirmed correct
+  - Confirm no document contains an unresolved forward reference to a document not yet authored
+  - _Requirements: 7.1, 7.2, 7.3_
+
+---
+
+## Notes
+
+- Tasks marked with `*` are optional and can be skipped for faster MVP (none in this plan — all authoring tasks are required)
+- Each task references specific requirements for traceability
+- Checkpoints ensure each wave is complete before the next begins
+- **Wave 5 parallelism:** Tasks 8 (Area 5) and 9 (Area 8) may be authored simultaneously
+- **Wave 7 note:** Task 13 (Area 6) may only begin after both Task 8 (Area 5) and Task 11 (Area 7) are complete
+- Each design document is a design-only spec — no requirements or task list files are produced for individual areas
+- Cross-cutting concern ownership: performance budgets → Area 6; accessibility + design tokens → Area 5; error handling → Area 8
+- When a non-owner document touches a cross-cutting concern, it must cite the owner document by name and section — never redefine it
