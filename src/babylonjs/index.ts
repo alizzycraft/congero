@@ -1,0 +1,13 @@
+export type * from './types';
+export { createAnimationState, canTransitionAnimation, transitionAnimation, isAnimationComplete } from './animation/animation-state-machine';
+export { evaluateEasing } from './animation/easing-functions';
+export { CARD_GEOMETRY, toCardMesh } from './cards/card-mesh-pipeline';
+export { getAtlasCoords } from './cards/texture-atlas';
+export { SceneEventRaiser } from './boundary/scene-event-raiser';
+export type { SceneEvents } from './boundary/scene-event-raiser';
+export { SceneUpdateHandlers } from './boundary/scene-update-handlers';
+export type { SceneUpdateSnapshot } from './boundary/scene-update-handlers';
+export { PERFORMANCE_BUDGET, getBudgetViolations, isWithinBudget } from './performance/performance-budget';
+export { SceneGraph, buildDefaultSceneGraph } from './scene/scene-graph';
+export { SceneManager } from './scene/scene-manager';
+export { createRootNode, createCameraNode, createLightNode, createTableNode, createMeldZoneNode, createCardMeshNode, createParticleSystemNode, createUIOverlayNode } from './scene/scene-node-factory';

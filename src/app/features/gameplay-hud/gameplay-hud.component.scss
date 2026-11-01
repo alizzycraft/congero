@@ -1,0 +1,101 @@
+.gameplay-screen {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: 48px 160px 160px 160px 140px 100px 100px 64px;
+  gap: var(--congero-spacing-md);
+  padding: var(--congero-spacing-xl);
+  box-sizing: border-box;
+  background: var(--congero-panel-gameplayBg);
+}
+
+.status-bar,
+.table-scene,
+.discard-zone,
+.hand-zone,
+.action-bar {
+  min-width: 0;
+}
+
+.status-bar {
+  grid-column: 1 / 13;
+  display: flex;
+  align-items: center;
+  gap: var(--congero-spacing-xl);
+}
+
+.table-scene {
+  grid-column: 1 / 13;
+  grid-row: 2 / 6;
+  min-height: 0;
+}
+
+.discard-zone {
+  grid-column: 1 / 4;
+  display: grid;
+  place-items: center;
+  border: var(--congero-panel-borderWidth) solid var(--congero-color-voidGray);
+  border-radius: var(--congero-panel-zoneRadius);
+  color: var(--congero-color-cometGray);
+}
+
+.hand-zone {
+  grid-column: 1 / 13;
+  display: flex;
+  gap: calc(var(--congero-card-width, 96px) * -0.4);
+  overflow-x: auto;
+  align-items: center;
+}
+
+.action-bar {
+  grid-column: 1 / 13;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--congero-spacing-md);
+}
+
+@media (max-width: 1240px) {
+  .gameplay-screen {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    padding: var(--congero-spacing-lg);
+  }
+
+  .status-bar,
+  .table-scene,
+  .hand-zone,
+  .action-bar {
+    grid-column: 1 / 9;
+  }
+}
+
+@media (max-width: 720px) {
+  .gameplay-screen {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: 48px auto 1fr auto auto;
+    padding: var(--congero-spacing-md);
+  }
+
+  .status-bar,
+  .table-scene,
+  .discard-zone,
+  .hand-zone,
+  .action-bar {
+    grid-column: 1 / 5;
+  }
+
+  .table-scene {
+    grid-row: auto;
+    min-height: 280px;
+  }
+
+  .hand-zone {
+    flex-direction: column;
+    max-height: 480px;
+    gap: var(--congero-spacing-sm);
+  }
+
+  .action-bar {
+    flex-direction: column;
+  }
+}

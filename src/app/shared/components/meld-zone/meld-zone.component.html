@@ -1,0 +1,22 @@
+<section
+  class="meld-zone congero-meld-zone"
+  [class.meld-zone--empty]="state().state === 'empty'"
+  [class.meld-zone--partial]="state().state === 'partial'"
+  [class.meld-zone--complete]="state().state === 'complete'"
+  [class.meld-zone--sealed]="state().state === 'sealed'"
+  role="region"
+  tabindex="0"
+  [attr.aria-label]="state().ariaLabel"
+>
+  @for (card of state().cards; track card.card.id) {
+    <app-card [state]="card" />
+  }
+
+  @for (_slot of ghostSlots(); track $index) {
+    <app-ghost-slot />
+  }
+
+  @if (state().isCanasta) {
+    <app-seal-ring [canastaType]="state().canastaType" />
+  }
+</section>

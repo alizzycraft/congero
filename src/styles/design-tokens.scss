@@ -1,0 +1,27 @@
+@use 'colors';
+@use 'typography';
+@use 'spacing';
+@use 'panels';
+@use 'backgrounds';
+
+:root {
+  @each $name, $value in colors.$colors {
+    --congero-color-#{$name}: #{$value};
+  }
+
+  @each $name, $value in typography.$typography {
+    --congero-typography-#{$name}: #{$value};
+  }
+
+  @each $name, $value in spacing.$spacing {
+    --congero-spacing-#{$name}: #{$value};
+  }
+
+  @each $name, $value in panels.$panels {
+    --congero-panel-#{$name}: #{$value};
+  }
+
+  @each $name, $value in backgrounds.$backgrounds {
+    --congero-bg-#{$name}: #{$value};
+  }
+}

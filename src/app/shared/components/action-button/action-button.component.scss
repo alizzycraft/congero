@@ -1,0 +1,33 @@
+:host {
+  display: inline-block;
+}
+
+.action-button {
+  min-width: 112px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--congero-spacing-sm);
+  padding: 0 var(--congero-spacing-lg);
+}
+
+.action-button__icon {
+  width: 20px;
+  text-align: center;
+}
+
+@media (max-width: 1240px) {
+  .action-button {
+    min-width: 44px;
+    padding: 0 var(--congero-spacing-md);
+  }
+
+  .action-button__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+}

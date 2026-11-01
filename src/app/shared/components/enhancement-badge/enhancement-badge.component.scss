@@ -1,0 +1,18 @@
+.enhancement-badge {
+  width: 16px;
+  height: 16px;
+  display: inline-grid;
+  place-items: center;
+  border: var(--congero-panel-borderWidth) solid;
+  border-radius: 50%;
+  background: var(--congero-color-spaceBlack);
+  font-size: var(--congero-typography-size-xs);
+  font-weight: var(--congero-typography-weight-bold);
+}
+
+@media (max-width: 720px) {
+  .enhancement-badge {
+    width: 12px;
+    height: 12px;
+  }
+}

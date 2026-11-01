@@ -1,0 +1,128 @@
+.card {
+  border-radius: var(--congero-panel-cardRadius);
+  transition: transform 150ms ease, box-shadow 150ms ease, opacity 150ms ease, border-color 150ms ease;
+
+  &--default {
+    border: var(--congero-panel-borderWidth) solid var(--congero-color-voidGray);
+    transform: scale(1);
+    cursor: default;
+  }
+
+  &--selected {
+    border: var(--congero-panel-borderGlowWidth) solid var(--congero-color-neonCyan);
+    box-shadow: var(--congero-panel-glowCyan);
+    transform: scale(1.06);
+    cursor: grab;
+  }
+
+  &--playable {
+    border: var(--congero-panel-borderWidth) solid var(--congero-color-neonGreen);
+    box-shadow: var(--congero-panel-glowGreen);
+    transform: scale(1);
+    cursor: pointer;
+  }
+
+  &--unplayable {
+    border: var(--congero-panel-borderWidth) solid var(--congero-color-asteroidGray);
+    filter: grayscale(60%);
+    transform: scale(1);
+    cursor: not-allowed;
+  }
+
+  &--wild {
+    border: var(--congero-panel-borderGlowWidth) solid var(--congero-color-neonPurple);
+    box-shadow: var(--congero-panel-glowPurple);
+    transform: scale(1);
+    cursor: default;
+  }
+
+  &--enhanced {
+    border-width: var(--congero-panel-borderGlowWidth);
+    border-style: solid;
+    transform: scale(1);
+    cursor: default;
+  }
+
+  &--sealed {
+    border: var(--congero-panel-borderGlowWidth) solid var(--congero-color-neonCyan);
+    box-shadow: var(--congero-panel-glowGold);
+    transform: scale(1);
+    cursor: default;
+  }
+
+  &--dragging {
+    border: var(--congero-panel-borderGlowWidth) solid var(--congero-color-neonCyan);
+    box-shadow: var(--congero-panel-glowCyan);
+    opacity: 0.8;
+    transform: scale(1.08) translateY(-8px);
+    z-index: 100;
+    cursor: grabbing;
+  }
+
+  &--ghost {
+    border: var(--congero-panel-borderWidth) dashed var(--congero-color-cometGray);
+    opacity: 0.4;
+    transform: scale(1);
+    cursor: default;
+  }
+}
+
+.meld-zone {
+  border-radius: var(--congero-panel-zoneRadius);
+  transition: border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+
+  &--empty {
+    border: var(--congero-panel-borderWidth) dashed var(--congero-color-cometGray);
+    background: color-mix(in srgb, var(--congero-color-voidGray) 30%, transparent);
+  }
+
+  &--partial {
+    border: var(--congero-panel-borderWidth) solid var(--congero-color-asteroidGray);
+    background: color-mix(in srgb, var(--congero-color-voidGray) 50%, transparent);
+  }
+
+  &--complete {
+    border: var(--congero-panel-borderGlowWidth) solid var(--congero-color-neonCyan);
+    box-shadow: var(--congero-panel-glowGold);
+  }
+
+  &--sealed {
+    border: var(--congero-panel-borderGlowWidth) solid var(--congero-color-neonCyan);
+    box-shadow: var(--congero-panel-glowCyan);
+  }
+}
+
+.action-button {
+  font-family: var(--congero-typography-body);
+  font-size: var(--congero-typography-size-md);
+  font-weight: var(--congero-typography-weight-semibold);
+  letter-spacing: var(--congero-typography-letterSpacing-wide);
+  border-radius: var(--congero-panel-cardRadius);
+  transition: opacity 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+
+  &--enabled {
+    border: var(--congero-panel-borderWidth) solid var(--congero-color-neonCyan);
+    background: var(--congero-color-nebulaDark);
+    color: var(--congero-color-starWhite);
+    cursor: pointer;
+  }
+
+  &--enabled:hover {
+    box-shadow: var(--congero-panel-glowCyan);
+  }
+
+  &--disabled {
+    border: var(--congero-panel-borderWidth) solid var(--congero-color-asteroidGray);
+    background: var(--congero-color-voidGray);
+    color: var(--congero-color-cometGray);
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  &--loading {
+    border: var(--congero-panel-borderWidth) solid var(--congero-color-neonCyan);
+    background: var(--congero-color-nebulaDark);
+    color: var(--congero-color-starWhite);
+    cursor: wait;
+  }
+}

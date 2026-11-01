@@ -1,0 +1,83 @@
+import type { BossRule } from '../types/boss-rule.types';
+
+export const ALL_BOSS_RULES: BossRule[] = [
+  {
+    id: 'the-purist',
+    name: 'The Purist',
+    description: 'Dirty canastas score half points.',
+    injectionPoints: ['ON_CANASTA_SCORED'],
+    hookOverrides: {},
+    effects: [
+      { target: 'score_multiplier', mode: 'multiplicative', value: 0.5, canastaTypeFilter: 'dirty', rankFilter: null },
+    ],
+    anteRange: null,
+    selectionWeight: 10,
+  },
+  {
+    id: 'wild-drought',
+    name: 'Wild Drought',
+    description: 'Wild cards are harder to use.',
+    injectionPoints: ['ON_MELD_VALIDATE', 'ON_TURN_START'],
+    hookOverrides: {},
+    effects: [],
+    anteRange: null,
+    selectionWeight: 10,
+  },
+  {
+    id: 'score-cap',
+    name: 'Score Cap',
+    description: 'Maximum score per canasta is capped.',
+    injectionPoints: ['ON_CANASTA_SCORED'],
+    hookOverrides: {},
+    effects: [
+      { target: 'score_cap', mode: 'override', value: 1000, canastaTypeFilter: null, rankFilter: null },
+    ],
+    anteRange: null,
+    selectionWeight: 10,
+  },
+  {
+    id: 'frozen-assets',
+    name: 'Frozen Assets',
+    description: 'Frozen canastas score more, but all others score less.',
+    injectionPoints: ['ON_CANASTA_SCORED'],
+    hookOverrides: {},
+    effects: [
+      { target: 'score_multiplier', mode: 'multiplicative', value: 1.5, canastaTypeFilter: 'frozen', rankFilter: null },
+      { target: 'score_multiplier', mode: 'multiplicative', value: 0.75, canastaTypeFilter: null, rankFilter: null },
+    ],
+    anteRange: null,
+    selectionWeight: 10,
+  },
+  {
+    id: 'rank-embargo',
+    name: 'Rank Embargo',
+    description: 'Certain ranks cannot be melded.',
+    injectionPoints: ['ON_MELD_VALIDATE'],
+    hookOverrides: {},
+    effects: [],
+    anteRange: null,
+    selectionWeight: 10,
+  },
+  {
+    id: 'last-stand',
+    name: 'Last Stand',
+    description: 'Going out is more difficult.',
+    injectionPoints: ['ON_GO_OUT_ATTEMPT'],
+    hookOverrides: {},
+    effects: [],
+    anteRange: null,
+    selectionWeight: 10,
+  },
+  {
+    id: 'sticky-fingers',
+    name: 'Sticky Fingers',
+    description: 'Each discard costs points.',
+    injectionPoints: ['ON_DISCARD'],
+    hookOverrides: {},
+    effects: [
+      { target: 'score_flat_bonus', mode: 'additive', value: -5, canastaTypeFilter: null, rankFilter: null },
+    ],
+    anteRange: null,
+    selectionWeight: 10,
+  },
+];

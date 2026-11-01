@@ -1,0 +1,19 @@
+<main class="score-screen" role="application" aria-label="Score results">
+  <header class="score-header" role="region">
+    <h1>Score Results</h1>
+  </header>
+  <section class="score-display" role="status" aria-live="polite">
+    <strong>{{ score() }}</strong>
+    <span>Target {{ target() }}</span>
+  </section>
+  <section class="score-breakdown" role="list" aria-label="Score breakdown">
+    <div role="listitem"><span>Base score</span><strong>{{ score() }}</strong></div>
+    <div role="listitem"><span>Target</span><strong>{{ target() }}</strong></div>
+  </section>
+  <section class="score-gold" role="status" aria-live="polite">
+    Gold earned {{ gold() }}
+  </section>
+  <nav class="score-actions" role="toolbar" aria-label="Score actions">
+    <app-action-button [state]="action" (actionClicked)="handleAction($event)" />
+  </nav>
+</main>

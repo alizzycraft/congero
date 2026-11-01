@@ -1,0 +1,8 @@
+<div class="dialog" role="dialog" aria-modal="true" aria-labelledby="confirmation-title">
+  <h2 id="confirmation-title">{{ title() }}</h2>
+  <p>{{ body() }}</p>
+  <div class="dialog__actions" role="toolbar" aria-label="Confirmation actions">
+    <app-action-button [state]="cancelState" (actionClicked)="handleAction($event)" />
+    <app-action-button [state]="confirmState" (actionClicked)="handleAction($event)" />
+  </div>
+</div>

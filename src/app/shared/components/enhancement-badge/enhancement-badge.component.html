@@ -1,0 +1,9 @@
+<span
+  class="enhancement-badge"
+  [style.border-color]="color()"
+  [style.color]="color()"
+  [attr.aria-label]="indicator().label"
+  role="img"
+>
+  {{ indicator().iconId.slice(12, 13).toUpperCase() }}
+</span>

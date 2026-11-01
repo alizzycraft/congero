@@ -1,0 +1,35 @@
+<div
+  class="card congero-card"
+  [class.card--default]="state().interactionState === 'default'"
+  [class.card--selected]="state().interactionState === 'selected'"
+  [class.card--playable]="state().interactionState === 'playable'"
+  [class.card--unplayable]="state().interactionState === 'unplayable'"
+  [class.card--wild]="state().interactionState === 'wild'"
+  [class.card--enhanced]="state().interactionState === 'enhanced'"
+  [class.card--sealed]="state().interactionState === 'sealed'"
+  [class.card--dragging]="state().interactionState === 'dragging'"
+  [class.card--ghost]="state().interactionState === 'ghost'"
+  role="option"
+  tabindex="0"
+  draggable="true"
+  [attr.aria-label]="state().ariaLabel"
+  [attr.aria-selected]="state().selected"
+  (click)="click($event)"
+  (dragstart)="dragStart()"
+>
+  @if (state().faceDown) {
+    <span class="congero-card__back" aria-hidden="true">CG</span>
+  } @else {
+    <span class="congero-card__rank">{{ state().card.rank }}</span>
+    <span class="congero-card__suit">{{ state().card.suit ?? '★' }}</span>
+    <span class="congero-card__points">{{ state().card.pointValue }}</span>
+  }
+
+  @if (state().enhancementIndicator; as indicator) {
+    <app-enhancement-badge class="congero-card__badge" [indicator]="indicator" />
+  }
+
+  @if (state().card.isBlackThree) {
+    <span class="congero-card__lock" aria-hidden="true">!</span>
+  }
+</div>

@@ -1,0 +1,36 @@
+<main class="gameplay-screen" role="application" aria-label="Gameplay">
+  <header class="status-bar" role="status" aria-live="polite">
+    <strong>Ante 1-1</strong>
+    <span>Target {{ roundState.scoreTarget() }}</span>
+    <span>Phase {{ roundState.roundState().phase }}</span>
+  </header>
+
+  <section class="table-scene" role="region" aria-label="3D game table">
+    <app-babylon-scene />
+    @for (object of sceneObjects(); track object.id) {
+      <app-babylon-object [object]="object" />
+    }
+  </section>
+
+  <section class="discard-zone" role="region" tabindex="0" aria-label="Discard pile">
+    <span>Discard</span>
+  </section>
+
+  <section
+    class="hand-zone"
+    role="listbox"
+    aria-multiselectable="true"
+    aria-orientation="horizontal"
+    appKeyboardNavigation
+  >
+    @for (card of cards(); track card.card.id) {
+      <app-card [state]="card" (cardClicked)="selectCard($event)" />
+    }
+  </section>
+
+  <nav class="action-bar" role="toolbar" aria-label="Game actions">
+    @for (action of actions(); track action.id) {
+      <app-action-button [state]="action" (actionClicked)="handleAction($event)" />
+    }
+  </nav>
+</main>

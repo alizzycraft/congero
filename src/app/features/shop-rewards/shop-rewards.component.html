@@ -1,0 +1,36 @@
+<main class="shop-screen" role="application" aria-label="Shop rewards">
+  @if (shop(); as currentShop) {
+    <header class="shop-header" role="region">
+      <h1>Shop Rewards</h1>
+      <span>Reroll {{ currentShop.nextRerollCost }} gold</span>
+    </header>
+    <ul class="shop-grid" role="list" aria-label="Shop items">
+      @for (item of currentShop.items; track item.id) {
+        <li class="shop-item" role="listitem" [attr.aria-label]="item.category + ' ' + item.rarity">
+          <strong>{{ item.category }}</strong>
+          <span>{{ item.rarity }}</span>
+          <span>{{ item.cost }} gold</span>
+          <app-action-button [state]="itemAction(item)" (actionClicked)="purchase($event)" />
+        </li>
+      }
+    </ul>
+  }
+  @if (pendingTargetPurchase(); as pending) {
+    <section class="target-picker" role="region" aria-label="Enhancement target">
+      <h2>{{ pending.enhancementType }} target</h2>
+      <ul class="target-grid" role="list" aria-label="Eligible cards">
+        @for (card of targetCards(); track card.id) {
+          <li class="target-card" role="listitem">
+            <span>{{ card.rank }} {{ card.suit ?? '' }}</span>
+            <app-action-button [state]="targetAction(card)" (actionClicked)="applyPendingTarget($event)" />
+          </li>
+        }
+      </ul>
+    </section>
+  }
+  <nav class="shop-actions" role="toolbar" aria-label="Shop actions">
+    @for (action of actions(); track action.id) {
+      <app-action-button [state]="action" (actionClicked)="handleAction($event)" />
+    }
+  </nav>
+</main>

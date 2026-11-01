@@ -1,0 +1,5 @@
+.ghost-slot {
+  width: var(--congero-card-width, 96px);
+  aspect-ratio: 24 / 35;
+  background: color-mix(in srgb, var(--congero-color-voidGray) 28%, transparent);
+}

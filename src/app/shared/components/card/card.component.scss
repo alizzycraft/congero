@@ -1,0 +1,56 @@
+.congero-card {
+  width: var(--congero-card-width, 96px);
+  aspect-ratio: 24 / 35;
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: var(--congero-spacing-sm);
+  box-sizing: border-box;
+  background: var(--congero-color-nebulaDark);
+  user-select: none;
+}
+
+.congero-card__rank {
+  font-family: var(--congero-typography-display);
+  font-size: var(--congero-typography-size-lg);
+  font-weight: var(--congero-typography-weight-bold);
+}
+
+.congero-card__suit,
+.congero-card__back {
+  align-self: center;
+  justify-self: center;
+  color: var(--congero-color-cometGray);
+  font-size: var(--congero-typography-size-sm);
+}
+
+.congero-card__points {
+  color: var(--congero-color-neonGold);
+  font-family: var(--congero-typography-mono);
+  font-size: var(--congero-typography-size-sm);
+}
+
+.congero-card__badge {
+  position: absolute;
+  top: var(--congero-spacing-xs);
+  right: var(--congero-spacing-xs);
+}
+
+.congero-card__lock {
+  position: absolute;
+  right: var(--congero-spacing-xs);
+  bottom: var(--congero-spacing-xs);
+  color: var(--congero-color-neonRed);
+}
+
+@media (max-width: 1240px) {
+  .congero-card {
+    width: var(--congero-card-width, 80px);
+  }
+}
+
+@media (max-width: 720px) {
+  .congero-card {
+    width: var(--congero-card-width, 64px);
+  }
+}

@@ -1,0 +1,9 @@
+$backgrounds: (
+  'starField': radial-gradient(circle at 20% 20%, rgba(240, 244, 255, 0.18) 0 1px, transparent 1px),
+  'nebulaCloud': radial-gradient(ellipse at 30% 20%, rgba(176, 38, 255, 0.08) 0%, transparent 50%),
+  'gridLines': repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0, 240, 255, 0.03) 39px, rgba(0, 240, 255, 0.03) 40px),
+  'vignette': radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(10, 14, 23, 0.6) 100%),
+  'scanlines': repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.05) 2px, rgba(0, 0, 0, 0.05) 4px),
+  'transitionDuration': 300ms,
+  'transitionEasing': cubic-bezier(0.4, 0, 0.2, 1),
+);

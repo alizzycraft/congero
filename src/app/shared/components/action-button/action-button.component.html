@@ -1,0 +1,15 @@
+<button
+  type="button"
+  class="action-button"
+  [class.action-button--enabled]="state().interactionState === 'enabled'"
+  [class.action-button--disabled]="state().interactionState === 'disabled'"
+  [class.action-button--loading]="state().interactionState === 'loading'"
+  [disabled]="state().interactionState !== 'enabled'"
+  [attr.aria-disabled]="state().interactionState !== 'enabled'"
+  [attr.aria-keyshortcuts]="state().shortcut"
+  [attr.aria-label]="state().ariaLabel"
+  (click)="click()"
+>
+  <span class="action-button__icon" aria-hidden="true">{{ state().iconId }}</span>
+  <span class="action-button__label">{{ state().label }}</span>
+</button>

@@ -1,0 +1,19 @@
+.dialog {
+  width: min(420px, 100%);
+  border: var(--congero-panel-borderWidth) solid var(--congero-color-neonCyan);
+  border-radius: var(--congero-panel-dialogRadius);
+  padding: var(--congero-spacing-xl);
+  background: var(--congero-color-nebulaDark);
+  box-shadow: var(--congero-panel-glowCyan);
+}
+
+h2,
+p {
+  margin-top: 0;
+}
+
+.dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--congero-spacing-md);
+}

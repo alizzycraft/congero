@@ -1,0 +1,25 @@
+<main class="deck-screen" role="application" aria-label="Deck inventory">
+  <header class="deck-header" role="region">
+    <h1>Deck Inventory</h1>
+  </header>
+  <section class="deck-summary" role="status" aria-live="polite">
+    <span>{{ deck().length }} cards</span>
+    <span>{{ cards().length }} visual entries</span>
+  </section>
+  <section class="deck-scene" role="region" aria-label="3D deck editor">
+    <app-babylon-scene />
+    @for (object of sceneObjects(); track object.id) {
+      <app-babylon-object [object]="object" />
+    }
+  </section>
+  <section class="deck-grid" role="listbox" aria-label="Cards in deck">
+    @for (card of cards(); track card.card.id) {
+      <app-card [state]="card" />
+    }
+  </section>
+  <nav class="deck-actions" role="toolbar" aria-label="Deck actions">
+    @for (action of actions; track action.id) {
+      <app-action-button [state]="action" />
+    }
+  </nav>
+</main>

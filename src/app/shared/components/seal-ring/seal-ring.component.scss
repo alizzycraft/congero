@@ -1,0 +1,8 @@
+.seal-ring {
+  position: absolute;
+  inset: -6px;
+  border: var(--congero-panel-borderGlowWidth) solid var(--congero-color-sealNatural);
+  border-radius: var(--congero-panel-zoneRadius);
+  box-shadow: var(--congero-panel-glowCyan);
+  pointer-events: none;
+}
